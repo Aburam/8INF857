@@ -1,4 +1,4 @@
- //"moves" every character in a string n places foreward in the alphabet
+//"moves" every character in a string n places foreward in the alphabet
 //the string is in variable text
 //the nb of places is in variable nb 
 package decryption;

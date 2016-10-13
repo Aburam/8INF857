@@ -1,0 +1,7 @@
+package decryption;
+
+public class Occurence {
+
+
+	String m_mot;
+}

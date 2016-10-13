@@ -1,0 +1,30 @@
+//"moves" every character in a string n places foreward in the alphabet
+//the string is in variable text
+//the nb of places is in variable nb 
+package decryption;
+
+public class SlideString {
+
+	private static String  text = "abcxyz"; 
+	private static int nb =2;
+	
+	public static void main(String[] args) 
+	{
+		
+		int []  temp= new int[text.length()];
+		String output = "";
+		for(int i=0;i<temp.length;i++)
+		{
+			temp[i]=( (int)text.charAt(i))+nb;
+			if (temp[i]>122)
+				temp[i]=temp[i]-26;
+			output=output + ((char) temp[i]);	
+		
+		}
+
+		System.out.println(output);
+	}
+
+	
+
+}

@@ -1,0 +1,13 @@
+package decryption;
+
+public class Occurence {
+
+
+	private String m_mot;
+	private int m_distance;
+	private int[] m_facteurDistance;
+	
+	public Occurence (String mot){
+		
+	}
+}

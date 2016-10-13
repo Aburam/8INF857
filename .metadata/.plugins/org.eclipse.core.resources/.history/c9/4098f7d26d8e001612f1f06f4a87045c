@@ -1,0 +1,33 @@
+package decryption;
+
+/**
+ * 
+ * @author Baptiste
+ *	
+ *	Décrit une répétition d'un mot au sein d'une chaine de caractère,
+ *  la distance entre ces répétitions et ses diviseurs.
+ */
+public class Occurence {
+
+
+	private String m_mot;
+	private int m_distance;
+	
+	public Occurence (String mot, int distance){
+		m_mot = mot;
+		m_distance = distance;
+	}
+
+	public String getMot() {
+		return m_mot;
+	}
+	
+	public int getDistance() {
+		return m_distance;
+	}
+	
+	public String toString(){
+		
+	}
+
+}

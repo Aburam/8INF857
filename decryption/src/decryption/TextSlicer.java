@@ -28,8 +28,7 @@ public class TextSlicer {
 		  j=0;
 		  for (j=0;j<nb;j++)
 		  {
-			 System.out.println( slices[j%nb]);
+			 System.out.println(slices[j%nb]);
 		  }
 	}
-
 }

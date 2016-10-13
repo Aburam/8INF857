@@ -1,0 +1,168 @@
+package decryption;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+
+public class Outils {
+
+	public static int PGCDDistance(ArrayList<Occurence> occurences){
+		int maxDiviseurCommun = 0;
+		for(ListIterator<Occurence> iterator1 = occurences.listIterator(); iterator1.hasNext() ; ) {
+		    Occurence ocurrence1 = iterator1.next();
+			int distance1 = ocurrence1.getDistance();
+		    for(ListIterator<Occurence> iterator2 = occurences.listIterator(iterator1.nextIndex()); iterator2.hasNext(); ) {
+		    	Occurence occurence2 = iterator2.next();
+				int distance2 = occurence2.getDistance();
+				int pgcd = PGCD(distance1, distance2);
+				if(pgcd>maxDiviseurCommun){
+					maxDiviseurCommun = pgcd;
+				}
+		    }
+		}
+		return maxDiviseurCommun;		
+	}
+	
+	private static int PGCD(int distance1, int distance2) {
+		if(distance1 % distance2 == 0 || distance2 % distance1 == 0){
+			return 0;
+		}
+		while(distance1 * distance2 !=0){
+			if (distance1>distance2){
+				distance1 = distance1-distance2;
+			}
+			else{
+				distance2 = distance2 - distance1;
+			}
+		}
+		return (distance1==0)? distance2 : distance1;
+	}
+
+	public static ArrayList<Occurence> searchOccur(String msg){
+		ArrayList<Occurence> occurences = new ArrayList<>();
+		int position;
+		for(position = 0; position<msg.length()-1; position++){
+			int currentPosition;
+			for(currentPosition = position+2; currentPosition<msg.length(); currentPosition++){
+				String motProbable="";
+				int positionMotProbable=0;
+				while(currentPosition+positionMotProbable < msg.length() &&
+						position+positionMotProbable < msg.length() &&
+						msg.charAt(position+positionMotProbable)==msg.charAt(currentPosition+positionMotProbable))
+				{
+						motProbable= motProbable + msg.charAt(position+positionMotProbable);
+						positionMotProbable++;
+				}
+				if(motProbable.length()>9){
+					int distance = currentPosition - position;
+					position = position + positionMotProbable;
+					currentPosition = currentPosition + positionMotProbable;
+					Occurence newOccurence = new Occurence(motProbable, distance);
+					adaptOccurences(occurences, newOccurence);
+				}
+			}
+
+		}
+		return occurences;
+	}
+
+	private static ArrayList<Occurence> adaptOccurences( ArrayList<Occurence> occurences, Occurence occurence) {
+		Iterator<Occurence> iterator1 = occurences.iterator();
+
+		boolean find = false;
+		while(iterator1.hasNext()){
+			Occurence occurenceToCompare = iterator1.next();
+			if(occurenceToCompare.getMot().equals(occurence.getMot())){
+				find = true;
+				if(occurence.getDistance()<occurenceToCompare.getDistance()){
+					occurences.remove(occurenceToCompare);
+					occurences.add(occurence);
+					return occurences;
+				}
+			}
+		}
+		if(!find){
+			occurences.add(occurence);
+		}
+		return occurences;
+	}
+	
+	//Splits the text in string text into the number of slices in variable nb, placing one letter into each slice in turn.  
+	// ex: abdcefhij into 3 slices gives  1) adh 2) bei 3) cfj  
+	public static String[] textSlicer(String text, int nb){
+		 String[]  slices= new String [nb]  ;
+		  int j=0;
+		  for (j=0;j<nb;j++)
+		  {
+			  slices[j%nb]="";
+			  
+		  }
+		  j=0;
+		  for (int i=0;i<text.length();i++)
+		  {
+			  slices[j%nb]=slices[j%nb]+text.charAt(i);
+			  j++;
+		  }
+		  j=0;
+		  for (j=0;j<nb;j++)
+		  {
+			 System.out.println( slices[j%nb]);
+		  }
+		  return slices;
+	}
+
+	public static List<HashMap<Character, Integer>> countNbLetters(String[] msgSliced) {
+		List<HashMap<Character, Integer>> listNumChars = new ArrayList<HashMap<Character, Integer>>(Math.min(msgSliced[0].length(), 26));
+		HashMap<Character, Integer> numChar0 = new HashMap<Character,Integer>();
+		initChar(numChar0);
+		System.out.println(numChar0.keySet());
+		for(int line = 0; line<msgSliced.length; line++)	{
+			HashMap<Character, Integer> numChars = new HashMap<Character,Integer>();
+			int len = msgSliced[line].length();
+			initChar(numChars);
+			for (int i = 0; i < len; ++i)
+			{
+			    char charAt = msgSliced[line].charAt(i);
+
+			    numChars.put(charAt, numChars.get(charAt) + 1);
+			}
+			listNumChars.add(numChars);
+			System.out.println(numChars.values());
+		}
+		return listNumChars;
+	}
+
+	private static void initChar(Map<Character, Integer> numChars) {
+			for(int i=(int)'a'; i<=(int)'z'; i++){
+				numChars.put((char)i, 0);
+			}
+	}
+
+	public static void showFrequenceAlphabet() {
+		char[] frequence = {'H','M','M','M','H','M','M','M','H','L','L','M','M','H','H','M','L','H','H','H','M','M','L','L','L','L'};
+		String frequenceAlphabet = "[";
+		for(char letterFrequence : frequence){
+			frequenceAlphabet = frequenceAlphabet + letterFrequence + ", ";
+		}
+		System.out.println(frequenceAlphabet + "]");
+	}
+
+	public static String findKey(List<HashMap<Character, Integer>> listNumChars) {
+		String key = "";
+		for(Map<Character, Integer> numChars : listNumChars){
+			char highKey = 0;
+			int highValue = 0;
+			for(Map.Entry<Character,Integer> numSet : numChars.entrySet()){
+				if(numSet.getValue()>highValue){
+					highKey = (char) ((int) (numSet.getKey() - 4));
+					highValue = numSet.getValue();
+				}
+			}
+			key = key + highKey;
+		}
+		return key;
+	}
+}

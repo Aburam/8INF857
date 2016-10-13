@@ -1,0 +1,29 @@
+package decryption;
+
+public class Occurence {
+
+
+	private String m_mot;
+	private int m_distance;
+	private int[] m_facteurDistance;
+	
+	public Occurence (String mot, int distance){
+		m_mot = mot;
+		m_distance = distance;
+		m_facteurDistance = calculateFacteurDistance();
+	}
+
+	private int[] calculateFacteurDistance() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getMot() {
+		return m_mot;
+	}
+	
+	public int getDistance() {
+		return m_distance;
+	}
+
+}

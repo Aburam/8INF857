@@ -1,0 +1,68 @@
+package decryption;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+
+	private static String file = ".\\message.txt";
+	private static String msg = "";
+	private static BufferedReader in;
+	
+	
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		Scanner scan = new Scanner(System.in);
+		
+		try {
+			readfile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ArrayList<Occurence> occurences = Outils.searchOccur(msg);
+		//ArrayList<Occurence> occurences = Outils.searchOccur("ADQYSMIUSBOXKKTMIBHKIZOOOEQOOGIFBAGKAUMFVVTAACIDTWMOCIOEQOOGBMBFVZGGWPCIEKQHSNEWVECNEDLAAVRWKXSVNSVPHCEUTQOIOFMEGJSWTPCHAJMOCHIUIX");
+		msg = msg.toLowerCase();
+		System.out.println("Liste des occurences : ");
+		for(Occurence occurence : occurences){
+			System.out.println("[" + occurence + "] ; ");
+		}
+		int tailleCle = Outils.PGCDDistance(occurences);
+		System.out.println("\nLa taille probable de la clé est : " + tailleCle);
+		
+		String[] msgSliced = Outils.textSlicer(msg, tailleCle);
+		
+		System.out.println("\nFréquence d'apparition de chaque caractère dans chaque ligne :\n");
+		List<HashMap<Character, Integer>> listNumChars = Outils.countNbLetters(msgSliced);
+		
+		System.out.println("\nFréquence de base dans l'alphabet (francais) \n");
+		Outils.showFrequenceAlphabet();	
+		
+		System.out.println("\nLa lettre la plus largement fréquente au sein de l'alphabet français étant 'e'," +
+				" nous recherchons l'occurence la plus forte sur chaque ligne afin d'en déduire la clé : \n");
+		String key = Outils.findKey(listNumChars);
+		System.out.println("La clé trouvée est : " + key);
+		
+		System.out.println("Quelle semble être la taille de la clé finalement ? ");
+	}
+
+	private static void readfile() throws IOException
+	{		
+			in = new BufferedReader(new FileReader(file)) ;
+			String line;
+			while ((line = in.readLine()) != null)
+			{
+				msg = msg +line;
+			}
+	}
+	
+}
